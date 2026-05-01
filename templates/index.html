@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Finder</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #111;
+            color: white;
+            text-align: center;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+        }
+
+        button {
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .job {
+            background: #222;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        a {
+            color: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+
+<h1>💼 Job Finder</h1>
+
+<input type="text" id="search" placeholder="Search job (e.g. Data Engineer)">
+<br><br>
+<input type="text" id="location" placeholder="Enter location (e.g. India)">
+<br><br>
+<button onclick="searchJobs()">Search</button>
+
+<div id="results"></div>
+
+<script>
+async function searchJobs() {
+    let query = document.getElementById("search").value;
+
+    let response = await fetch("/jobs?query=" + query);
+    let data = await response.json();
+
+    let resultsDiv = document.getElementById("results");
+    resultsDiv.innerHTML = "";
+
+    data.results.forEach(function(job) {
+        let div = document.createElement("div");
+        div.className = "job";
+
+        div.innerHTML =
+            "<h3>" + job.title + "</h3>" +
+            "<p><b>" + job.company + "</b> - " + job.location + "</p>" +
+            "<a href='" + job.url + "' target='_blank'>Apply</a>";
+
+        resultsDiv.appendChild(div);
+    });
+}
+</script>
+
+</body>
+</html>
